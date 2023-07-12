@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
     /** 
-     * login api 
+     * Log in with a mail and password
      * 
      * @return \Illuminate\Http\Response 
      */
@@ -25,8 +25,9 @@ class UserController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
     }
+
     /** 
-     * Register api 
+     * Register a new user
      * 
      * @return \Illuminate\Http\Response 
      */
@@ -59,8 +60,9 @@ class UserController extends Controller
         $success['token'] = $accessToken;
         return response()->json(['success' => $success], 200);
     }
+
     /** 
-     * details api 
+     * Returns the details of a user
      * 
      * @return \Illuminate\Http\Response 
      */
