@@ -16,10 +16,11 @@ return new class extends Migration
             $table->string("first_name");
             $table->string("last_name");
             $table->string("mail");
-            $table->text("gender");
+            $table->string("password");
+            $table->text("gender")->nullable();
             $table->foreignId('role_id')->constrained();
-            $table->foreignId('ed_program_id')->constrained();
-            $table->foreignId('class_id')->constrained();
+            $table->foreignId('ed_program_id')->nullable()->constrained();
+            $table->foreignId('class_id')->nullable()->constrained();
             $table->timestamps();
         });
     }
