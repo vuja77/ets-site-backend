@@ -22,6 +22,9 @@ return "not authenticated";
 })->name("a");
 Route::resource('classes', Controllers\ClassController::class);
 Route::resource('ed_programs', Controllers\EdProgramController::class);
+Route::post('getcourse', [Controllers\CourseController::class, 'getcourse']);
+
+Route::resource('course', Controllers\CourseController::class);
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('details', [Controllers\UserController::class, 'details'])->name("details");
