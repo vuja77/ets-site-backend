@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
             ClassSeeder::class,
             EdProgramSeeder::class,
             RoleSeeder::class,
+            CourseTypeSeeder::class,
+            CourseSeeder::class,
         ]);
     }
 }

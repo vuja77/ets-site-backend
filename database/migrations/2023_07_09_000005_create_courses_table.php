@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->string("thumbnail");
+            $table->string("thumbnail")->default('default.jpg');
             $table->foreignId('course_type_id')->constrained();
+            $table->timestamps();
            
  
         });

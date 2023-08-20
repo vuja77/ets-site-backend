@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('lesson_id')->constrained();
             $table->string("url")->nullable();
             $table->string("file_path")->nullable();
-            $table->string("post_content");
+            $table->string("post_content")->nullable();
             $table->timestamps();
         });
     }

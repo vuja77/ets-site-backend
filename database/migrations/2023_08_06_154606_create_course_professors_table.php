@@ -17,6 +17,8 @@ return new class extends Migration
                 table: 'users'
             );
             $table->foreignId('course_id')->constrained();
+            $table->timestamps();
+
         });
     }
 

@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,9 +23,23 @@ return "not authenticated";
 })->name("a");
 Route::resource('classes', Controllers\ClassController::class);
 Route::resource('ed_programs', Controllers\EdProgramController::class);
-Route::post('getcourse', [Controllers\CourseController::class, 'getcourse']);
+Route::get('getcourse/{id}', [Controllers\CourseController::class, 'getcourse']);
 
 Route::resource('course', Controllers\CourseController::class);
+Route::resource('courseProfessor', Controllers\CourseProfessorController::class);
+
+
+Route::resource('courseTracker', Controllers\CourseTrackerController::class);
+
+
+Route::resource('lesson', Controllers\LessonController::class);
+Route::resource('Material', Controllers\MaterialController::class);
+Route::get('getMaterial/{id}', [Controllers\MaterialController::class, "getMaterial"]); 
+Route::get('getlesson/{id}', [Controllers\LessonController::class, 'getLessonByCourse']);
+Route::get('getclass/{id}', [Controllers\ClassController::class, 'getClass']);
+Route::get('download/{name}', [Controllers\MaterialController::class, 'Download']);
+Route::get('search/{name}', [Controllers\CourseController::class, 'search']);
+
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('details', [Controllers\UserController::class, 'details'])->name("details");

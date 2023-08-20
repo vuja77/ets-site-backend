@@ -6,6 +6,11 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\Course;
 
+
+use App\Models\Coursetaker;
+use App\Models\CourseProfessor;
+use App\Models\User;
+use App\Models\Lesson;
 class CourseController extends Controller
 {
     /**
@@ -30,11 +35,9 @@ class CourseController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            
-            'class_id' => 'required',
             'name' => 'required',
-            'subject_id' => 'required',
-            'professor_id' => 'required',
+            'thumbnail' => 'required',
+            'course_type_id' => 'required',
         ]);
 
        $Course = Course::create($validated);
@@ -45,15 +48,18 @@ class CourseController extends Controller
      */
     public function show(string $id)
     {
-       return Course::find($id);
+        
+      /* $Lesson = Lesson::join("courses", "lessons.course_id", "=", "courses.id")
+        ->where("courses.id", "=", $id)
+        ->get(["lessons.name", "lessons.section", "lessons.id", "courses.thumbnail"]);*/
+
+       $Course= Course::where("id", $id)->get(["name", "thumbnail"]);
+       return $Course;
     }
 
-    public function getcourse(Request $request)
-    {
-       
+   
 
-        return Course::all()->whereIn("id", $request->get("id"));
-    }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -77,4 +83,21 @@ class CourseController extends Controller
     {
         //
     }
+    public function getcourse(string $id)
+    {
+     
+        return Course::join('course_takers', 'courses.id', '=', 'course_takers.course_id')
+        ->join('course_types', 'courses.course_type_id', '=', 'course_types.id')
+        ->join('course_professors', 'courses.id', '=', 'course_professors.course_id')
+        ->join('users', 'users.id', '=', 'course_professors.professor_id')
+        ->where("course_takers.class_id", "=",$id)
+        ->get(["courses.*", "course_takers.class_id", "users.first_name", "users.last_name", "course_types.name as courseTypeName"]);
+    
+       
+    }
+
+    public function search(string $name) {
+        return Course::where("name", "like", '%a%')->get();
+    }
+
 }

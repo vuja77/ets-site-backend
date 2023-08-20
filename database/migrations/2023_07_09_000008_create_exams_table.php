@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('course_id')->constrained();
             $table->time("start_date");
             $table->integer("duration");
+            $table->timestamps();
+
         });
     }
 
