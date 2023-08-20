@@ -23,8 +23,11 @@ class DatabaseSeeder extends Seeder
             ClassSeeder::class,
             EdProgramSeeder::class,
             RoleSeeder::class,
+            UserSeeder::class,
             CourseTypeSeeder::class,
             CourseSeeder::class,
+            CourseProfessorSeeder::class,
+            CourseTakerSeeder::class,
         ]);
     }
 }
