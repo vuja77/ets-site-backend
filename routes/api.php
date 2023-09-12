@@ -30,6 +30,7 @@ Route::resource('courseProfessor', Controllers\CourseProfessorController::class)
 
 
 Route::resource('courseTracker', Controllers\CourseTrackerController::class);
+Route::get('getcourseUser/{id}', [Controllers\CourseController::class, 'getcourseUsers']);
 
 
 Route::resource('lesson', Controllers\LessonController::class);
@@ -41,6 +42,10 @@ Route::get('download/{name}', [Controllers\MaterialController::class, 'Download'
 Route::get('search/{name}', [Controllers\CourseController::class, 'search']);
 
 
+Route::resource('homework', Controllers\HomeworkController::class);
+Route::get('gethomework/{id}', [Controllers\HomeworkController::class, 'gethomework']);
+Route::get('gethomeworkUpload/{id}/{myid}', [Controllers\HomeworkUploadController::class, 'gethomeworkUpload']);
+Route::resource('homeworkUpload', Controllers\HomeworkUploadController::class);
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('details', [Controllers\UserController::class, 'details'])->name("details");
 });

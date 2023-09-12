@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('materials', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('lesson_id')->constrained();
+            $table->foreignId('lesson_id')->constrained()->onDelete("Cascade");
             $table->string("url")->nullable();
             $table->string("file_path")->nullable();
             $table->string("post_content")->nullable();

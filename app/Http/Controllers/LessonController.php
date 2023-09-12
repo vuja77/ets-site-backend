@@ -65,14 +65,12 @@ class LessonController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+       Lesson::destroy($id);
     }
 
     public function getLessonByCourse(string $id) {
-        //return Lesson::all()->where("course_id", $id);
-        return Lesson::join("courses", "lessons.course_id", "=", "courses.id")
-        ->where("courses.id", "=", $id)
-        ->get(["lessons.name", "lessons.section", "lessons.id", "lessons.created_at", "courses.thumbnail"]);
+        return Lesson::where("course_id", "=", $id)
+        ->get(["name", "lessons.section","lessons.hide", "lessons.id", "lessons.created_at"]);
         
     }
 

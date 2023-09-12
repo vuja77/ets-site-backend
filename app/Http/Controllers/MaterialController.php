@@ -87,18 +87,20 @@ class MaterialController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Material::destroy($id);
+
     }
 
     public function getMaterial(string $id) {
-        return Material::where("lesson_id", $id)->get();
+        //return Material::where("lesson_id", $id)->get();
         
        // return Material::all()->where("lesson_id", $id);
 
 
-        /* return Material::join("lessons", "materials.lesson_id", "=", "lessons.id")
-        ->where("materials.lesson_id", "=", $id)
-        ->get();*/
+        return Material::join("lessons", "materials.lesson_id", "=", "lessons.id")
+        ->join("courses", "lessons.course_id", "=", "courses.id")
+        ->where("courses.id", "=", $id)
+        ->get("materials.*");
     }
 
     public function Download(string $name) {

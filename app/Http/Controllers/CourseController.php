@@ -18,7 +18,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        return Course::all()->whereIn("id", [3, 7, 8, 1]);
+        return Course::all();
     }
 
     /**

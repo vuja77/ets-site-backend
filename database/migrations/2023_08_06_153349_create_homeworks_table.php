@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('homeworks', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->string("section");
-            $table->date("deadline");
+          
+            $table->string("description");
+            $table->date("deadline")->nullable();
             $table->foreignId('course_id')->constrained();
             $table->timestamps();
         });
