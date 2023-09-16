@@ -16,3 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view(public_path() . '\uploads\kurs2\scormcontent\index.html');
 });
+Route::get('/{path?}', function () {
+    return view('app'); // 'app' je naziv Vue.js ili React komponente
+})->where('path', '.*');

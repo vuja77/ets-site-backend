@@ -41,7 +41,8 @@ class LessonController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return Lesson::where("id", "=", $id)->get();
+
     }
 
     /**
@@ -57,9 +58,8 @@ class LessonController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        Lesson::where("id", "=", $id)->update($request->all());
     }
-
     /**
      * Remove the specified resource from storage.
      */
