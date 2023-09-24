@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\ScormData;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+
 class ScormDataController extends Controller
 {
     /**
@@ -19,7 +21,7 @@ class ScormDataController extends Controller
      */
     public function create()
     {
-        
+
     }
 
     /**
@@ -31,34 +33,28 @@ class ScormDataController extends Controller
             "course_id" => "",
             "user_id" => "",
             "data" => "",
-          
-       ]); 
-       
+        ]);
+
         ScormData::create($validated);
     }
     public function setValue(Request $request)
     {
         $validated = $request->validate([
-            "course_id" => "",
-            "user_id" => "",
+            "scorm_filename" => "",
             "data" => "",
-          
-       ]); 
-       $course_id = $request->input('course_id');
-       $id = $request->input('user_id');
-        if(ScormData::where("course_id", "=", $course_id)->where("user_id", "=", $id)->exists()) {
-            ScormData::where("course_id", "=", $course_id)->where("user_id", "=", $id)->update(["data" => $request->input("data")]);
+        ]);
+
+        $scorm_filename = $request->input('scorm_filename');
+        $id = $request->user()->id;
+        if (ScormData::where("scorm_filename", "=", $scorm_filename)->where("user_id", "=", $id)->exists()) {
+            ScormData::where("scorm_filename", "=", $scorm_filename)->where("user_id", "=", $id)->update(["data" => $request->input("data")]);
         } else {
             ScormData::create($validated);
         }
-       
-       
     }
-    public function getValue(string $course_id, string $id)
+    public function getValue(string $course_id, Request $request)
     {
-        
-      
-        return ScormData::where("course_id", "=", $course_id)->where("user_id", "=", $id)->get();
+        return ScormData::where("course_id", "=", $course_id)->where("user_id", "=", $request->user()->id)->get();
     }
 
     /**
@@ -91,5 +87,43 @@ class ScormDataController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function uploadCourse(Request $request)
+    {
+        $file = $request->file('file');
+        if ($file) {
+            $file_name_noext = time() . rand(1, 99);
+            $file_name = $file_name_noext . '.' . $file->extension();
+            $file->move(storage_path('app/public/courses'), $file_name);
+
+            $zip = new \ZipArchive();
+            echo $file_name;
+            $res = $zip->open(storage_path('app/public/courses/') . $file_name);
+
+            if ($res === true) {
+                $zip->extractTo(storage_path('app/public/courses/') . $file_name_noext);
+                $zip->close();
+                File::delete(storage_path('app/public/courses/') . $file_name);
+
+                // Course::where("id", "=", $id)-update($request->all());
+
+            } else {
+                return response()->json([
+                    "success" => false,
+                    "message" => "extract failed",
+                ]);
+            }
+
+            return response()->json([
+                "success" => true,
+                "message" => "File successfully uploaded",
+            ]);
+        } else {
+            return response()->json([
+                "success" => false,
+                "message" => "File missing",
+            ]);
+        }
     }
 }

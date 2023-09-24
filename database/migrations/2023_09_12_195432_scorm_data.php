@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('scorm_data', function (Blueprint $table) {
             $table->id();
-            $table->string("course_id");
+            $table->string("scorm_filename");
             $table->foreignId('user_id')->constrained();
             $table->longText("data");
             $table->timestamps();

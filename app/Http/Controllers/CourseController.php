@@ -48,18 +48,13 @@ class CourseController extends Controller
      */
     public function show(string $id)
     {
-        
-      /* $Lesson = Lesson::join("courses", "lessons.course_id", "=", "courses.id")
-        ->where("courses.id", "=", $id)
-        ->get(["lessons.name", "lessons.section", "lessons.id", "courses.thumbnail"]);*/
-
-       $Course= Course::where("id", $id)->get(["name", "thumbnail"]);
-       return $Course;
+       return Course::join('course_professors', 'courses.id', '=', 'course_professors.course_id')
+       ->join("users", "course_professors.professor_id", "=", "users.id")
+       //->join("course_skills", "courses.id", "=", "course_skills.course_id")
+       //->join("skills", "course_skills.skill_id", "=", "skills.id")
+       ->where("courses.id", $id)->get(["courses.name", "thumbnail", "scorm_filename", "description", "users.first_name", "users.last_name"]);
+       
     }
-
-   
-
-
     /**
      * Show the form for editing the specified resource.
      */
@@ -85,7 +80,7 @@ class CourseController extends Controller
     }
     public function getcourse(string $id)
     {
-     
+        
         return Course::join('course_takers', 'courses.id', '=', 'course_takers.course_id')
         ->join('course_types', 'courses.course_type_id', '=', 'course_types.id')
         ->join('course_professors', 'courses.id', '=', 'course_professors.course_id')
@@ -95,7 +90,16 @@ class CourseController extends Controller
     
        
     }
-
+    public function getcourseUser(string $id)
+    {
+     
+        return Course::join('course_takers', 'courses.id', '=', 'course_takers.course_id')
+        ->join('users', 'users.class_id', '=', 'course_takers.class_id')
+        ->where("courses.id", "=",$id)
+        ->get(["users.*"]);
+    
+       
+    }
     public function search(string $name) {
         return Course::where("name", "like", '%a%')->get();
     }

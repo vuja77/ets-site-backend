@@ -24,6 +24,7 @@ return "not authenticated";
 Route::resource('classes', Controllers\ClassController::class);
 Route::resource('ed_programs', Controllers\EdProgramController::class);
 Route::get('getcourse/{id}', [Controllers\CourseController::class, 'getcourse']);
+Route::get('getcourseUser/{id}', [Controllers\CourseController::class, 'getcourseUser']);
 
 Route::resource('course', Controllers\CourseController::class);
 Route::resource('courseProfessor', Controllers\CourseProfessorController::class);
@@ -32,8 +33,9 @@ Route::resource('courseProfessor', Controllers\CourseProfessorController::class)
 Route::resource('courseTracker', Controllers\CourseTrackerController::class);
 Route::resource('scorm', Controllers\ScormDataController::class);
 Route::post('set-value', [Controllers\ScormDataController::class, 'setValue']);
-Route::get('get-value/{course_id}/{id}', [Controllers\ScormDataController::class, 'getValue']);
+Route::get('get-value/{course_id}', [Controllers\ScormDataController::class, 'getValue']);
 Route::get('gethomeworkUpload/{id}/{myid}', [Controllers\HomeworkUploadController::class, 'gethomeworkUpload']);
+Route::post('upload-scorm-course', [Controllers\ScormDataController::class, 'uploadCourse']);
 
 Route::resource('lesson', Controllers\LessonController::class);
 Route::resource('Material', Controllers\MaterialController::class);
