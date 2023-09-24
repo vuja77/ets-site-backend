@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string("name");
             $table->string("scorm_filename")->nullable()->default(null);
             $table->string("thumbnail")->default('default.jpg');
+            $table->string("description")->nullable()->default(null);
             $table->foreignId('course_type_id')->constrained();
             $table->timestamps();
            
