@@ -40,16 +40,17 @@ class ScormDataController extends Controller
     public function setValue(Request $request)
     {
         $validated = $request->validate([
-            "scorm_filename" => "",
+            "scorm_filename" => "required",
             "data" => "",
         ]);
 
         $scorm_filename = $request->input('scorm_filename');
         $id = $request->user()->id;
+      
         if (ScormData::where("scorm_filename", "=", $scorm_filename)->where("user_id", "=", $id)->exists()) {
             ScormData::where("scorm_filename", "=", $scorm_filename)->where("user_id", "=", $id)->update(["data" => $request->input("data")]);
         } else {
-            ScormData::create($validated);
+            ScormData::create(["scorm_filename" => $request-input("scorm_filename"), "data" => $request->input("data")]);
         }
     }
     public function getValue(string $course_id, Request $request)
