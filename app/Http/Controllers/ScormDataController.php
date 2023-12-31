@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ScormData;
+use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
