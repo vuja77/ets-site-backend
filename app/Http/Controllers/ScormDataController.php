@@ -93,6 +93,7 @@ class ScormDataController extends Controller
     public function uploadCourse(Request $request)
     {
         $file = $request->file('file');
+        $id = $request->input('id');
         if ($file) {
             $file_name_noext = time() . rand(1, 99);
             $file_name = $file_name_noext . '.' . $file->extension();
@@ -107,7 +108,7 @@ class ScormDataController extends Controller
                 $zip->close();
                 File::delete(storage_path('app/public/courses/') . $file_name);
 
-                // Course::where("id", "=", $id)-update($request->all());
+                Course::where("id", "=", $id)->update(['scorm_filename' => $file_name_noext]);
 
             } else {
                 return response()->json([

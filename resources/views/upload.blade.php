@@ -21,6 +21,7 @@
 
         <label for="zip_file">Izaberite ZIP fajl:</label>
         <input type="file" name="file" accept=".zip" required>
+        <input type="number" name="id" required>
 
         <button type="submit">Upload</button>
     </form>
