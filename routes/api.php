@@ -30,7 +30,7 @@ Route::resource('course', Controllers\CourseController::class);
 Route::resource('courseProfessor', Controllers\CourseProfessorController::class);
 
 
-Route::resource('courseTracker', Controllers\CourseTrackerController::class);
+Route::resource('courseTracker', Controllers\CourseTakerController::class);
 Route::resource('scorm', Controllers\ScormDataController::class);
 Route::post('set-value', [Controllers\ScormDataController::class, 'setValue']);
 Route::get('get-value/{course_id}', [Controllers\ScormDataController::class, 'getValue']);

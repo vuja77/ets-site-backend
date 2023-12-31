@@ -14,5 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view(public_path() . '\uploads\kurs2\scormcontent\index.html');
+    return view('welcome');
+});
+
+Route::get('/upload-form', function () {
+    return view('upload');
 });

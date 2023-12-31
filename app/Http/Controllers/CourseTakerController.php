@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\CourseTracker;
-class CourseTrackerController extends Controller
+class CourseTakerController extends Controller
 {
     /**
      * Display a listing of the resource.
