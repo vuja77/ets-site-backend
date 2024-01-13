@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
-
+use App\Mail\SendMail;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +28,7 @@ Route::get('getcourseUser/{id}', [Controllers\CourseController::class, 'getcours
 
 Route::resource('course', Controllers\CourseController::class);
 Route::resource('courseProfessor', Controllers\CourseProfessorController::class);
-
+Route::post("send-mail", [Controllers\MaliController::class, 'send']);
 
 Route::resource('courseTracker', Controllers\CourseTakerController::class);
 Route::resource('scorm', Controllers\ScormDataController::class);
