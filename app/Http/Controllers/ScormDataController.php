@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ScormData;
 use App\Models\Course;
+use App\Models\ScormData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -47,11 +47,11 @@ class ScormDataController extends Controller
 
         $scorm_filename = $request->input('scorm_filename');
         $id = $request->user()->id;
-      
+
         if (ScormData::where("scorm_filename", "=", $scorm_filename)->where("user_id", "=", $id)->exists()) {
             ScormData::where("scorm_filename", "=", $scorm_filename)->where("user_id", "=", $id)->update(["data" => $request->input("data")]);
         } else {
-            ScormData::create(["scorm_filename" => $request-input("scorm_filename"), "data" => $request->input("data")]);
+            ScormData::create(["scorm_filename" => $request - input("scorm_filename"), "data" => $request->input("data")]);
         }
     }
     public function getValue(string $course_id, Request $request)
@@ -117,7 +117,6 @@ class ScormDataController extends Controller
                     "message" => "extract failed",
                 ]);
             }
-
             return response()->json([
                 "success" => true,
                 "message" => "File successfully uploaded",

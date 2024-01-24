@@ -9,6 +9,7 @@
         "backpack/crud": "^6.1",
         "backpack/revise-operation": "^2.0",
         "backpack/theme-tabler": "^1.0",
+        "barryvdh/laravel-dompdf": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/passport": "^11.8",

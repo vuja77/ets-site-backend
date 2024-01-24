@@ -1,16 +1,13 @@
 <?php
-
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Validator;
-
-use Illuminate\Http\Request;
 use App\Models\Course;
-
-
-use App\Models\Coursetaker;
+use App\Models\CoursePassed;
 use App\Models\CourseProfessor;
-use App\Models\User;
 use App\Models\Lesson;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 class CourseController extends Controller
 {
     /**
@@ -26,7 +23,7 @@ class CourseController extends Controller
      */
     public function create(Request $request)
     {
-        
+
     }
 
     /**
@@ -34,13 +31,15 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
         $validated = $request->validate([
             'name' => 'required',
             'thumbnail' => 'required',
             'course_type_id' => 'required',
         ]);
 
-       $Course = Course::create($validated);
+        $Course = Course::create($validated);
+        return CourseProfessor::create(["course_id" => $Course->id, "professor_id" => $user->id]);
     }
 
     /**
@@ -48,12 +47,22 @@ class CourseController extends Controller
      */
     public function show(string $id)
     {
-       return Course::join('course_professors', 'courses.id', '=', 'course_professors.course_id')
-       ->join("users", "course_professors.professor_id", "=", "users.id")
-       //->join("course_skills", "courses.id", "=", "course_skills.course_id")
-       //->join("skills", "course_skills.skill_id", "=", "skills.id")
-       ->where("courses.id", $id)->get(["courses.name", "thumbnail", "scorm_filename", "description", "users.first_name", "users.last_name"]);
-       
+        $user = Auth::user();
+
+        $Course = Course::join('course_professors', 'courses.id', '=', 'course_professors.course_id')
+            ->join("users", "course_professors.professor_id", "=", "users.id")
+            ->join('course_types', "courses.course_type_id", "=", "course_types.id")
+            ->where("courses.id", $id)->get(["courses.name", "thumbnail", "scorm_filename", "description", "users.first_name", "users.last_name", "course_types.name as type_name"]);
+
+        $Lessons = Lesson::
+            where("lessons.course_id", $id)->get(["lessons.*"]);
+        $Passed = CoursePassed::
+            where([
+            ['course_id', '=', $id],
+            ['user_id', '=', $user->id],
+        ])->get();
+        return ["lessons" => $Lessons, "course" => $Course, "passed" => $Passed];
+
     }
     /**
      * Show the form for editing the specified resource.
@@ -68,7 +77,9 @@ class CourseController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+       
+        $data = array_filter($request->all());
+        return Course::where("id", $id)->update($data);
     }
 
     /**
@@ -80,27 +91,36 @@ class CourseController extends Controller
     }
     public function getcourse(string $id)
     {
-        
+
         return Course::join('course_takers', 'courses.id', '=', 'course_takers.course_id')
-        ->join('course_types', 'courses.course_type_id', '=', 'course_types.id')
-        ->join('course_professors', 'courses.id', '=', 'course_professors.course_id')
-        ->join('users', 'users.id', '=', 'course_professors.professor_id')
-        ->where("course_takers.class_id", "=",$id)
-        ->get(["courses.*", "course_takers.class_id", "users.first_name", "users.last_name", "course_types.name as courseTypeName"]);
-    
-       
+            ->join('course_types', 'courses.course_type_id', '=', 'course_types.id')
+            ->join('course_professors', 'courses.id', '=', 'course_professors.course_id')
+            ->join('users', 'users.id', '=', 'course_professors.professor_id')
+            ->join('lessons', 'course.id', '=', 'lessons.course_id')
+            ->where("course_takers.class_id", "=", $id)
+            ->get(["courses.*", "course_takers.class_id", "users.first_name", "users.last_name", "course_types.name as courseTypeName"], ["lessons.*"]);
+
     }
     public function getcourseUser(string $id)
     {
-     
+
         return Course::join('course_takers', 'courses.id', '=', 'course_takers.course_id')
-        ->join('users', 'users.class_id', '=', 'course_takers.class_id')
-        ->where("courses.id", "=",$id)
-        ->get(["users.*"]);
-    
-       
+            ->join('users', 'users.class_id', '=', 'course_takers.class_id')
+            ->where("courses.id", "=", $id)
+            ->get(["users.*"]);
+
     }
-    public function search(string $name) {
+    public function getProfessorCourse()
+    {
+        $user = Auth::user();
+
+        return Course::join('course_professors', 'courses.id', '=', 'course_professors.course_id')
+            ->where("course_professors.professor_id", "=", $user->id)
+            ->get(["courses.*"]);
+
+    }
+    public function search(string $name)
+    {
         return Course::where("name", "like", '%a%')->get();
     }
 
